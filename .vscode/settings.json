@@ -1,0 +1,6 @@
+{
+    // Satisfy Java's IntelliSense by marking "Partie1" as the source path
+    "java.project.sourcePaths": [
+        "Partie1"
+    ]
+}
