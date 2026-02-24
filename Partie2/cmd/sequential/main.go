@@ -47,7 +47,7 @@ func main() {
 
 	// Get unfilled position count from programs
 	for _, program := range programMap {
-		unfilled := program.NPositions - len(program.SelectedResidents)
+		unfilled := program.NPositions - program.SelectedResidents.Len()
 		numPositionsAvailable += unfilled
 	}
 

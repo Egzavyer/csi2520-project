@@ -1,6 +1,7 @@
 package partie2
 
 import (
+	heap "csi2520/partie2/internal/heap"
 	"encoding/csv"
 	"fmt"
 	"os"
@@ -22,9 +23,9 @@ type Resident struct {
 type Program struct {
 	ProgramID         string
 	Name              string
-	NPositions        int         // number of positions available (quota)
-	Rol               []int       // program rank order list
-	SelectedResidents []*Resident // TODO: List of pointers to residents for now, change to maxheap later
+	NPositions        int                      // number of positions available (quota)
+	Rol               []int                    // program rank order list
+	SelectedResidents *heap.MaxHeap[*Resident] // Matched residents: pop returns least-preferred resident
 }
 
 // Parse a resident's ROL
@@ -145,11 +146,13 @@ func ReadProgramsCSV(filename string) (map[string]*Program, error) {
 			return nil, fmt.Errorf("invalid number at line %d: %w", i+1, err)
 		}
 
+		rol := parseIntRol(record[3])
 		programs[record[0]] = &Program{
-			ProgramID:  record[0],
-			Name:       record[1],
-			NPositions: np,
-			Rol:        parseIntRol(record[3]),
+			ProgramID:         record[0],
+			Name:              record[1],
+			NPositions:        np,
+			Rol:               rol,
+			SelectedResidents: heap.NewMaxHeapWithCap[*Resident](len(rol)),
 		}
 
 	}
