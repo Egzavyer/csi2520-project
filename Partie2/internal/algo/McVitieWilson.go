@@ -1,6 +1,10 @@
 package algo
 
-import csv "csi2520/partie2/internal/csv"
+import (
+	"slices"
+
+	csv "csi2520/partie2/internal/csv"
+)
 
 func McVitieWilsonSequential(residents map[int]*csv.Resident, programs map[string]*csv.Program) {
 	for r := range residents {
@@ -30,7 +34,7 @@ func offer(rid int, residents map[int]*csv.Resident, programs map[string]*csv.Pr
 
 func evaluate(resident *csv.Resident, program *csv.Program, residents map[int]*csv.Resident, programs map[string]*csv.Program) {
 
-	if !in(resident.ResidentID, program.Rol) {
+	if !slices.Contains(program.Rol, resident.ResidentID) {
 		offer(resident.ResidentID, residents, programs)
 	} else if program.NPositions != len(program.SelectedResidents) {
 		resident.MatchedProgram = program.ProgramID
@@ -43,15 +47,6 @@ func evaluate(resident *csv.Resident, program *csv.Program, residents map[int]*c
 	} else {
 		offer(resident.ResidentID, residents, programs)
 	}
-}
-
-func in(val int, list []int) bool {
-	for v := range list {
-		if val == v {
-			return true
-		}
-	}
-	return false
 }
 
 func prefers(p *csv.Program, r *csv.Resident) (*csv.Resident, bool) {
