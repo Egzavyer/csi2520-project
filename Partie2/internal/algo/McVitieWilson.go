@@ -15,7 +15,7 @@ func offer(rid int, residents map[int]*csv.Resident, programs map[string]*csv.Pr
 	idx := resident.NextProgIdx
 	if idx >= len(resident.Rol) {
 		// We have exhausted the list of programs the resident wants
-		resident.MatchedProgram = ""
+		resident.MatchedProgram = "XXX"
 		return
 	}
 
