@@ -9,9 +9,25 @@ func McVitieWilsonSequential(residents map[int]*csv.Resident, programs map[strin
 }
 
 func offer(rid int, residents map[int]*csv.Resident, programs map[string]*csv.Program) {
-	// TODO: find next available program in residentROL. What does available mean? No matches? Quota not reached yet? Not evaluated yet?
+	resident := residents[rid]
 
+	// Check that the resident still has programs to evaluate
+	idx := resident.NextProgIdx
+	if idx >= len(resident.Rol) {
+		// We have exhausted the list of programs the resident wants
+		resident.MatchedProgram = ""
+		return
+	}
+
+	// Increment the next program index for the next call
+	resident.NextProgIdx++
+
+	progId := resident.Rol[idx]
+	progToTry := programs[progId]
+
+	evaluate(resident, progToTry, residents, programs)
 }
-func evaluate(rid int, pid string, residents map[int]*csv.Resident, programs map[string]*csv.Program) {
+
+func evaluate(resident *csv.Resident, program *csv.Program, residents map[int]*csv.Resident, programs map[string]*csv.Program) {
 
 }

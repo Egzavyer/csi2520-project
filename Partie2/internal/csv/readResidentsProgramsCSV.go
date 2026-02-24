@@ -14,6 +14,7 @@ type Resident struct {
 	Firstname      string
 	Lastname       string
 	Rol            []string // resident rank order list
+	NextProgIdx    int      // The index into Rol of the next match to attempt
 	MatchedProgram string   // will be "" for unmatched resident
 }
 
