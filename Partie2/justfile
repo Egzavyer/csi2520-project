@@ -1,5 +1,5 @@
-run: build
-	./build/partie2/partie2
+run-sequential: build-sequential
+	./build/partie2/sequential
 
-build:
-	go build -o build/partie2/partie2 cmd/partie2/main.go
+build-sequential:
+	go build -o build/partie2/sequential cmd/sequential/main.go
