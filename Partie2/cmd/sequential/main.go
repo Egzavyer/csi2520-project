@@ -4,15 +4,23 @@ import (
 	"csi2520/partie2/internal/algo"
 	csv "csi2520/partie2/internal/csv"
 	"fmt"
+	"os"
 )
 
 func main() {
-	residentMap, err := csv.ReadResidentsCSV("../ResidentsPrograms/residentSmall.csv")
+	// Parse cmdline args
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: sequential <residentsFile> <programsFile>")
+	}
+	residentFile := os.Args[1]
+	programFile := os.Args[2]
+
+	residentMap, err := csv.ReadResidentsCSV(residentFile)
 	if err != nil {
 		panic(err)
 	}
 
-	programMap, err := csv.ReadProgramsCSV("../ResidentsPrograms/programSmall.csv")
+	programMap, err := csv.ReadProgramsCSV(programFile)
 	if err != nil {
 		panic(err)
 	}

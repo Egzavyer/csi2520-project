@@ -1,5 +1,5 @@
 run-sequential: build-sequential 
-	./build/partie2/sequential
+	./build/partie2/sequential ../ResidentsPrograms/residentSmall.csv ../ResidentsPrograms/programSmall.csv
 
 build-sequential:
 	go build -o build/partie2/sequential cmd/sequential/main.go
