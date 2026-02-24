@@ -1,4 +1,4 @@
-run-sequential: build-sequential
+run-sequential: build-sequential 
 	./build/partie2/sequential
 
 build-sequential:
