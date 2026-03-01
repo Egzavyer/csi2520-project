@@ -5,15 +5,19 @@ import (
 	csv "csi2520/partie2/internal/csv"
 	"fmt"
 	"os"
+	"slices"
+	"time"
 )
 
 func main() {
 	// Parse cmdline args
-	if len(os.Args) != 3 {
-		fmt.Println("Usage: sequential <residentsFile> <programsFile>")
+	if len(os.Args) != 4 {
+		fmt.Println("Usage: projet <sequential | concurrent> <residentsFile> <programsFile>")
+		return
 	}
-	residentFile := os.Args[1]
-	programFile := os.Args[2]
+	execution := os.Args[1]
+	residentFile := os.Args[2]
+	programFile := os.Args[3]
 
 	residentMap, err := csv.ReadResidentsCSV(residentFile)
 	if err != nil {
@@ -25,7 +29,27 @@ func main() {
 		panic(err)
 	}
 
-	algo.McVitieWilsonSequential(residentMap, programMap)
+	var start time.Time
+	var end time.Time
+
+	switch execution {
+	case "sequential":
+		start = time.Now()
+
+		algo.McVitieWilsonSequential(residentMap, programMap)
+
+		end = time.Now()
+	case "concurrent":
+		start = time.Now()
+
+		algo.McVitieWilsonConcurrent(residentMap, programMap)
+
+		end = time.Now()
+	default:
+		fmt.Printf("Invalid program execution type: %s", execution)
+		fmt.Println("Usage: projet <sequential | concurrent> <residentsFile> <programsFile>")
+		return
+	}
 
 	// ================ OUTPUT RESULTS ================
 	var unmatchedResidentCount int
@@ -34,8 +58,22 @@ func main() {
 	// Print CSV header
 	fmt.Println("lastname,firstname,residentID,programID,name")
 
+	// Sort residents by lastname for deterministic output
+	sortedResidents := make([]*csv.Resident, 0, len(residentMap))
+	for _, r := range residentMap {
+		sortedResidents = append(sortedResidents, r)
+	}
+	slices.SortFunc(sortedResidents, func(a, b *csv.Resident) int {
+		if a.Lastname < b.Lastname {
+			return -1
+		} else if a.Lastname > b.Lastname {
+			return 1
+		}
+		return 0
+	})
+
 	// Print match results
-	for _, resident := range residentMap {
+	for _, resident := range sortedResidents {
 		// Get the name of the matched program (defaults to NOT_MATCHED)
 		var programName string
 		if resident.MatchedProgram != "XXX" {
@@ -63,4 +101,6 @@ func main() {
 	fmt.Println()
 	fmt.Println("Number of unmatched residents:", unmatchedResidentCount)
 	fmt.Println("Number of positions available:", numPositionsAvailable)
+
+	fmt.Printf("\nExecution time: %s\n", end.Sub(start))
 }
