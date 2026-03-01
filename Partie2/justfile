@@ -1,0 +1,18 @@
+run-small EXEC: build 
+	mkdir -p ../out
+	./build/partie2/partie2 {{EXEC}} ../ResidentsPrograms/residentSmall.csv ../ResidentsPrograms/programSmall.csv > ../out/small_{{EXEC}}.txt
+
+run-4k EXEC: build 
+	mkdir -p ../out
+	./build/partie2/partie2 {{EXEC}} ../ResidentsPrograms/residents4000.csv ../ResidentsPrograms/programs4000.csv > ../out/4k_{{EXEC}}.txt
+
+run-large EXEC: build 
+	mkdir -p ../out
+	./build/partie2/partie2 {{EXEC}} ../ResidentsPrograms/residentsLarge.csv ../ResidentsPrograms/programsLarge.csv > ../out/large_{{EXEC}}.txt
+
+build:
+	go build -o build/partie2/partie2 cmd/partie2/main.go
+
+compare FILE1 FILE2:
+	mkdir -p ../out
+	python3 ../compareCSV.py ../out/{{FILE1}} ../out/{{FILE2}}
