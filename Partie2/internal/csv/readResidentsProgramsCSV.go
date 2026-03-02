@@ -12,23 +12,23 @@ import (
 
 // The Resident data type
 type Resident struct {
+	sync.Mutex
 	ResidentID     int
 	Firstname      string
 	Lastname       string
 	Rol            []string // resident rank order list
 	NextProgIdx    int      // The index into Rol of the next match to attempt
 	MatchedProgram string   // will be "XXX" for unmatched resident
-	Mu             sync.Mutex
 }
 
 // The Program data type
 type Program struct {
+	sync.Mutex
 	ProgramID         string
 	Name              string
 	NPositions        int                      // number of positions available (quota)
 	Rol               []int                    // program rank order list
 	SelectedResidents *heap.MaxHeap[*Resident] // Matched residents: pop returns least-preferred resident
-	Mu                sync.Mutex
 }
 
 // Parse a resident's ROL
